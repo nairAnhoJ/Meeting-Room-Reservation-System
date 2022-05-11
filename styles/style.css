@@ -1,0 +1,8 @@
+#calendar {
+  height: calc(100vh - 200px) !important;
+}
+
+.fc-button-primary {
+  background-color: #1e7afd !important;
+}
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+    <title>Login</title>
+
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+    <script src="./js/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="container-fluid vh-100 text-center">
+    <div class="row vh-100 justify-content-end text-center">
+        <div class="col-7 text-center vh-100 pt-5">
+            <h1 class="mt-5 text-light">Room Reservation System</h1>
+            <img src="./images/company-logo.png" class="mt-5" alt="company-logo" height="300px">
+        </div>
+        <div class="col-5 align-self-center">
+            <h1 class="fw-bold">Sign In</h1>
+            <form action="" method="POST" class="container needs-validation mt-4">
+                <div class="position-relative mb-4 w-50 mx-auto">
+                    <img src="./images/user.png" class="position-absolute start-0" style="margin: 1.25rem 0 0 1.25rem;" height="23px">
+                    <input type="text" class="form-control fs-5 rounded-pill py-3" style="padding-left: 3.5rem;" placeholder="Username" required>
+                </div>
+
+                <div class="position-relative mb-4 w-50 mx-auto">
+                    <img src="./images/password.png" class="position-absolute start-0" style="margin: 1.25rem 0 0 1.25rem;" height="23px">
+                    <input type="password" class="form-control fs-5 rounded-pill py-3" style="padding-left: 3.5rem;" placeholder="Password" required>
+                </div>
+
+                <div class="input-group justify-content-center mt-4">
+                    <div class="col-5">
+                        <button class="btn btn-primary bg-gradient rounded px-5 py-2 fs-4 rounded-pill" type="submit">Sign In</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <!-- <img src="./images/Login-bg6.png" height="100vh" class="img-fluid fixed-top" alt="..." style="z-index: -1;"> -->
+    <div class="rounded-circle bg-primary bg-gradient position-fixed" style="width: 4000px; height: 4000px; top: -2500px; left: -2700px; z-index: -1;"></div>
+
+</div>
+</body>
+</html>
