@@ -11,10 +11,6 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" id="reserve" href="./reserve.php">Reserve</a>
-            </li>
-
-            <li class="nav-item">
                 <a class="nav-link" id="request" href="./request.php">My Request</a>
             </li>
 
