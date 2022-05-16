@@ -1,3 +1,14 @@
+<?php
+    session_start();
+
+    include("../Database/connection.php");
+
+    if(!isset($_SESSION['Connected'])){
+        header('location: ../login.php');
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

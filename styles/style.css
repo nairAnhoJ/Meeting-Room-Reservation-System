@@ -6,6 +6,51 @@
   background-color: #1e7afd !important;
 }
 
+.dataTables_length {
+  float: left;
+  margin-left: 2rem;
+}
+
+.toolbar {
+  float: right;
+  margin-right: 2rem;
+}
+
+#usersTable_filter {
+  float: right;
+}
+
+#usersTable_filter label {
+  font-size: 19px;
+}
+
+#usersTable_filter label input {
+  padding-left: 1rem;
+  font-size: 19px;
+  width: 15rem;
+}
+
+.dataTables_info {
+  float: left;
+  margin-left: 1rem;
+}
+
+.pagination {
+  margin-right: 1rem !important;
+}
+
+.dataTables_scrollBody {
+  margin-bottom: 0.5rem;
+}
+
+.dataTables_scrollHeadInner {
+  width: 100% !important;
+}
+
+.dataTables_scrollHeadInner table {
+  width: 100% !important;
+}
+
 #pills-tab {
   width: 1320px;
   padding-left: 12px;

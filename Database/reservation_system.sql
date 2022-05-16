@@ -32,3 +32,10 @@ CREATE TABLE `reservation_system`.`reservation` (
     `end_time` TIME NOT NULL ,
     PRIMARY KEY (`reserve_id`)
 ) ENGINE = InnoDB;
+
+
+CREATE TABLE `reservation_system`.`department` (
+    `dept_id` INT NOT NULL AUTO_INCREMENT ,
+    `dept_name` VARCHAR(255) NOT NULL ,
+    PRIMARY KEY (`dept_id`)
+    ) ENGINE = InnoDB;

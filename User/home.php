@@ -10,6 +10,11 @@
             $first_room = $room_row['room_name'];
         }
     }
+
+    if(!isset($_SESSION['Connected'])){
+        header('location: ../login.php');
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -98,8 +103,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="staticBackdropLabel">Reserve a Room</h5>
                 </div>
                 <div class="modal-body">
                     <form class="needs-validation" id="frmModal" action="./reserve_room.php" method="POST" novalidate>
@@ -150,19 +154,9 @@
 
 
 
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
+<!-- ================================ SCRIPT ================================ -->
 
     <script>
         function navFunction(){
@@ -244,7 +238,6 @@
                                 click: function() {
                                     selectedRoomId = this.id;
                                     $('#selected_room_name').val(this.id.replace(/_/g, " "));
-                                    $('#desc').focus();
                                 }
                             }
                         },
@@ -266,13 +259,11 @@
             });
             // ===================================== END =====================================
 
+            // Form(Modal) Validation
             var forms;
-
             (function () {
             'use strict'
-
             forms = document.querySelectorAll('.needs-validation');
-
             Array.prototype.slice.call(forms)
                 .forEach(function (form) {
                 form.addEventListener('submit', function (event) {
@@ -286,13 +277,71 @@
                 });
             })();
 
+            // Reset Modal on Close
             $('#staticBackdrop').on('hidden.bs.modal', function() {
                 $('#frmModal').removeClass('was-validated');
                 $('#frmModal').get(0).reset();
+            });
 
+            
+            $("#startDate").change(function(){
+                if(!$("#endDate").val()){
+                    $("#endDate").val(this.value);
+                }
+
+                var sDate = $('#startDate').val();
+                var eDate = $('#endDate').val();
+                var sTime = new Date(sDate).getTime();
+                var eTime = new Date(eDate).getTime();
+
+                var today = new Date();
+                var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var dateTime = date+' '+time;
+
+                if(sTime > eTime){
+                    $("#startDate").val(eDate);
+                }
+            });
+            $("#endDate").change(function(){
+                if(!$("#startDate").val()){
+                    $("#startDate").val(this.value);
+                }
+
+                var sDate = $('#startDate').val();
+                var eDate = $('#endDate').val();
+                var sTime = new Date(sDate).getTime();
+                var eTime = new Date(eDate).getTime();
+
+                if(sTime > eTime){
+                    $("#endDate").val(sDate);
+                }
+            });
+            $("#startTime").change(function(){
+                if(!$("#endTime").val()){
+                    $("#endTime").val(this.value);
+                }
+
+                var sTime = $('#startTime').val();
+                var eTime = $('#endTime').val();
+
+                if(sTime > eTime){
+                    $("#startTime").val(eTime);
+                }
+            });
+            $("#endTime").change(function(){
+                if(!$("#startTime").val()){
+                    $("#startTime").val(this.value);
+                }
+
+                var sTime = $('#startTime').val();
+                var eTime = $('#endTime').val();
+
+                if(sTime > eTime){
+                    $("#endTime").val(sTime);
+                }
             });
         });
-
         
     </script>
 </body>
