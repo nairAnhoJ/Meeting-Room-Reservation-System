@@ -21,6 +21,10 @@
             <li class="nav-item <?php if(($_SESSION['role'] != 'superuser') && ($_SESSION['role'] != 'head')){ echo 'visually-hidden'; } ?>">
                 <a class="nav-link fs-5" id="manageuser" href="./manage-user.php">Manage Users</a>
             </li>
+
+            <li class="nav-item <?php if($_SESSION['role'] != 'superuser'){ echo 'visually-hidden'; } ?>">
+                <a class="nav-link fs-5" id="managedept" href="#">Manage Departments</a>
+            </li>
             
             <li class="nav-item dropdown position-absolute end-0 pe-5 me-5">
                 <a class="nav-link dropdown-toggle active fs-5" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?php echo $_SESSION['fname']; ?> </a>

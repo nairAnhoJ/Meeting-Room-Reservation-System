@@ -65,6 +65,37 @@
             }
         }
 
+        if(!isset($_SESSION['editSuccess'])){
+        }else{
+            if ($_SESSION['editSuccess'] == true){
+                ?>
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Congratulations',
+                            text: 'User has been updated successfully!',
+                        });
+                    </script>
+                <?php
+                $_SESSION['editSuccess'] = false;
+            }
+        }
+
+        if(!isset($_SESSION['deleteSuccess'])){
+        }else{
+            if ($_SESSION['deleteSuccess'] == true){
+                ?>
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'User has been deleted successfully.',
+                        });
+                    </script>
+                <?php
+                $_SESSION['deleteSuccess'] = false;
+            }
+        }
     ?>
 
     <?php require_once './nav.php' ?>
@@ -130,7 +161,7 @@
                                                     <path d="M421.7 220.3L188.5 453.4L154.6 419.5L158.1 416H112C103.2 416 96 408.8 96 400V353.9L92.51 357.4C87.78 362.2 84.31 368 82.42 374.4L59.44 452.6L137.6 429.6C143.1 427.7 149.8 424.2 154.6 419.5L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3zM492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75z"/>
                                                 </svg>
                                             </button>
-                                            <button href="#" class="btn ms-1" id="<?php echo $rowUsers['idNum'] ?>">
+                                            <button class="deleteBtn btn ms-1" id="<?php echo $rowUsers['idNum'] ?>" data-name="<?php echo $rowUsers['full_name'] ?>">
                                                 <svg style="fill: #dc3545;" height="20px" viewBox="0 0 448 512">
                                                     <path d="M135.2 17.69C140.6 6.848 151.7 0 163.8 0H284.2C296.3 0 307.4 6.848 312.8 17.69L320 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H32C14.33 96 0 81.67 0 64C0 46.33 14.33 32 32 32H128L135.2 17.69zM31.1 128H416V448C416 483.3 387.3 512 352 512H95.1C60.65 512 31.1 483.3 31.1 448V128zM111.1 208V432C111.1 440.8 119.2 448 127.1 448C136.8 448 143.1 440.8 143.1 432V208C143.1 199.2 136.8 192 127.1 192C119.2 192 111.1 199.2 111.1 208zM207.1 208V432C207.1 440.8 215.2 448 223.1 448C232.8 448 240 440.8 240 432V208C240 199.2 232.8 192 223.1 192C215.2 192 207.1 199.2 207.1 208zM304 208V432C304 440.8 311.2 448 320 448C328.8 448 336 440.8 336 432V208C336 199.2 328.8 192 320 192C311.2 192 304 199.2 304 208z"/>
                                                 </svg>
@@ -215,7 +246,7 @@
                                                     if(mysqli_num_rows($resultHeads) > 0){
                                                         while($rowHeads = mysqli_fetch_assoc($resultHeads)){
                                                             ?>
-                                                                <option value="<?php echo $rowHeads['idNum']; ?>"><?php echo $rowHeads['full_name']; ?></option>
+                                                                <option value="<?php echo $rowHeads['idNum']; ?>" data-head-id="<?php echo $rowHeads['full_name']; ?>"><?php echo $rowHeads['full_name']; ?></option>
                                                             <?php
                                                         }
                                                     }
@@ -273,8 +304,10 @@
                 }  
             });
 
-            var UName, UEmail, UDept, UHead, URole;
 
+            var UName, UEmail, UDept, UHead, URole, thisID, loopIndex, optionIndex, hideIndex;
+
+            // ============================= EDIT BUTTON =============================
             $('.editBtn').click(function(){
                 $('#user_idNumber').val(this.id);
                 UName = $(this).attr("data-name");
@@ -282,23 +315,47 @@
                 UDept = $(this).attr("data-dept");
                 UHead = $(this).attr("data-head");
                 URole = $(this).attr("data-role");
+                loopIndex = 0;
+                optionIndex = 0;
+                hideIndex = 0;
+                thisID = this.id;
 
                 $('#oprole').val(URole);
                 $('#uname').val(UName);
                 $('#uemail').val(UEmail);
                 $('#modalTitle').html('Edit User');
+                $('#udept').val(UDept);
+
+                $("#uhead > option").each(function() {
+                    $(this).show();
+                });
+
+                $("#uhead > option").each(function() {
+                    if($(this).data('head-id') == UHead){
+                    optionIndex = loopIndex;
+                    }else{
+                        loopIndex++;
+                    }
+                });
 
                 if($(this).attr("data-role") == 'head'){
                     $('#ophead').addClass('visually-hidden');
                     $('#opdept').removeClass('visually-hidden');
+                    $('#udept').val(UDept);
                 }else if($(this).attr("data-role") == 'staff'){
                     $('#opdept').addClass('visually-hidden');
                     $('#ophead').removeClass('visually-hidden');
+                    $('#udept').val(UDept);
+
+                    
+
+                    document.getElementById("uhead").selectedIndex = optionIndex;
                 }
 
                 $('#user_idNumber').attr('readonly', true);
                 $('#frmModal').attr('action', './edit-user.php');
             });
+            // ============================= END =============================
 
             $('#oprole').change(function(){
                 if($(this).val() == 'head'){
@@ -307,6 +364,22 @@
                 }else if($(this).val() == 'staff'){
                     $('#opdept').addClass('visually-hidden');
                     $('#ophead').removeClass('visually-hidden');
+
+                    $("#uhead > option").each(function() {
+                        if(UHead == "-"){
+                            if($(this).val() == thisID){
+                                $(this).hide();
+                                if(hideIndex == 0){
+                                    optionIndex = hideIndex + 1;
+                                }else{
+                                    optionIndex = 0;
+                                }
+                            }else{
+                                hideIndex++;
+                            }
+                        }
+                    });
+                    document.getElementById("uhead").selectedIndex = optionIndex;
                 }
             });
 
@@ -407,6 +480,22 @@
                 removeValidationError();
                 $('#frmModal').get(0).reset();
             });
+
+            $('.deleteBtn').click(function(){
+                Swal.fire({
+                    title: 'Are you sure you want to delete this user?',
+                    html: "ID Number: "+ this.id +"<br>Name: "+ $(this).data('name'),
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = './delete-user.php?delUser=' + this.id;
+                    }
+                })
+            })
         });
     </script>
 </body>
