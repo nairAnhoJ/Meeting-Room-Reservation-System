@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../fullcalendar-5.11.0/lib/main.min.css">
     <link rel="stylesheet" href="../bootstrap/css/dataTables.bootstrap5.min.css">
-    <title>Manage Departments</title>
+    <title>Manage Rooms</title>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -41,7 +41,7 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Congratulations',
-                            text: '<?php echo $_SESSION['deptAddName']; ?> has been added successfully!',
+                            text: '<?php echo $_SESSION['roomAddName']; ?> has been added successfully!',
                         });
                     </script>
                 <?php
@@ -57,7 +57,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
-                            text: 'The Department you entered already exist.',
+                            text: 'The Room you entered already exist.',
                         });
                     </script>
                 <?php
@@ -73,7 +73,7 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Congratulations',
-                            text: 'Department has been updated successfully!',
+                            text: 'Room has been updated successfully!',
                         });
                     </script>
                 <?php
@@ -89,7 +89,7 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Deleted!',
-                            text: 'Department has been deleted successfully.',
+                            text: 'Room has been deleted successfully.',
                         });
                     </script>
                 <?php
@@ -102,39 +102,39 @@
 
     <div class="row justify-content-center mt-5 w-100">
         <div class="col-3">
-            <input type="text" class="form-control w-50 ps-3 ms-3 rounded-pill" id="searchDept" placeholder="Search...">
+            <input type="text" class="form-control w-50 ps-3 ms-3 rounded-pill" id="searchRoom" placeholder="Search...">
         </div>
         <div class="col-3">
-            <button type="text" class="btn btn-primary float-end me-3" id="addDept" data-bs-toggle="modal" data-bs-target="#deptModal">+ Add Department</button>
+            <button type="text" class="btn btn-primary float-end me-3" id="addRoom" data-bs-toggle="modal" data-bs-target="#roomModal">+ Add Room</button>
         </div>
     </div>
     <div class="row justify-content-center mt-3 w-100">
         <div class="col-6">
             <hr class="my-0">
-            <table class="table table-striped table-hover text-center" id="deptTable">
+            <table class="table table-striped table-hover text-center" id="roomTable">
                 <thead>
                     <tr>
-                        <th>Department</th>
+                        <th>Room</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                        $queryDept = "SELECT * FROM `department`";
-                        $resultDept = mysqli_query($con, $queryDept);
-                        if(mysqli_num_rows($resultDept) > 0){
-                            while($rowDept = mysqli_fetch_assoc($resultDept)){
+                        $queryRoom = "SELECT * FROM `room`";
+                        $resultRoom = mysqli_query($con, $queryRoom);
+                        if(mysqli_num_rows($resultRoom) > 0){
+                            while($rowRoom = mysqli_fetch_assoc($resultRoom)){
                                 ?>
                                     <tr>
-                                        <td class="align-middle"><?php echo $rowDept['dept_name']; ?></td>
+                                        <td class="align-middle"><?php echo str_replace("_"," ", $rowRoom['room_name']); ?></td>
                         
                                     <td>
-                                        <button class="editBtn btn me-3" data-dept="<?php echo $rowDept['dept_name']; ?>" data-deptid="<?php echo $rowDept['dept_id']; ?>" data-bs-toggle="modal" data-bs-target="#deptModal">
+                                        <button class="editBtn btn me-3" data-room="<?php echo str_replace("_"," ", $rowRoom['room_name']); ?>" data-roomid="<?php echo $rowRoom['room_id']; ?>" data-bs-toggle="modal" data-bs-target="#roomModal">
                                             <svg style="fill: #0d6efd;" height="20px" viewBox="0 0 512 512">
                                                 <path d="M421.7 220.3L188.5 453.4L154.6 419.5L158.1 416H112C103.2 416 96 408.8 96 400V353.9L92.51 357.4C87.78 362.2 84.31 368 82.42 374.4L59.44 452.6L137.6 429.6C143.1 427.7 149.8 424.2 154.6 419.5L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3zM492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75z"/>
                                             </svg>
                                         </button>
-                                        <button class="deleteBtn btn ms-3" data-dept="<?php echo $rowDept['dept_name']; ?>" data-deptid="<?php echo $rowDept['dept_id']; ?>">
+                                        <button class="deleteBtn btn ms-3" data-room="<?php echo str_replace("_"," ", $rowRoom['room_name']); ?>" data-roomid="<?php echo $rowRoom['room_id']; ?>">
                                             <svg style="fill: #dc3545;" height="20px" viewBox="0 0 448 512">
                                                 <path d="M135.2 17.69C140.6 6.848 151.7 0 163.8 0H284.2C296.3 0 307.4 6.848 312.8 17.69L320 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H32C14.33 96 0 81.67 0 64C0 46.33 14.33 32 32 32H128L135.2 17.69zM31.1 128H416V448C416 483.3 387.3 512 352 512H95.1C60.65 512 31.1 483.3 31.1 448V128zM111.1 208V432C111.1 440.8 119.2 448 127.1 448C136.8 448 143.1 440.8 143.1 432V208C143.1 199.2 136.8 192 127.1 192C119.2 192 111.1 199.2 111.1 208zM207.1 208V432C207.1 440.8 215.2 448 223.1 448C232.8 448 240 440.8 240 432V208C240 199.2 232.8 192 223.1 192C215.2 192 207.1 199.2 207.1 208zM304 208V432C304 440.8 311.2 448 320 448C328.8 448 336 440.8 336 432V208C336 199.2 328.8 192 320 192C311.2 192 304 199.2 304 208z"/>
                                             </svg>
@@ -150,18 +150,18 @@
         </div>
     </div>
 
-    <div class="modal fade" id="deptModal" data-bs-backdrop="static" data-bs-keyboard="false"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="roomModal" data-bs-backdrop="static" data-bs-keyboard="false"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitle"></h5>
                 </div>
                 <div class="modal-body px-5">
-                    <form class="needs-validation" id="frmModal" action="./dept-add.php" method="POST">
+                    <form class="needs-validation" id="frmModal" action="./room-add.php" method="POST">
                         <div class="row mb-4">
-                                <label for="deptName" class="col-form-label">Department Name:</label>
-                                <input type="text" name="dept-name" id="deptName" class="form-control" autofocus autocomplete="off">
-                                <div class="text-danger visually-hidden" id="deptError">Please enter a valid Department Name.</div>
+                                <label for="roomName" class="col-form-label">Room Name:</label>
+                                <input type="text" name="room-name" id="roomName" class="form-control" autofocus autocomplete="off">
+                                <div class="text-danger visually-hidden" id="roomError">Please enter a valid Room Name.</div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" id class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -178,57 +178,57 @@
 
     <script>
         function navFunction(){
-            $("#managedept").addClass("active");
+            $("#managerooms").addClass("active");
         }
 
         $(document).ready(function(){
-            $("#searchDept").on("keyup", function() {
+            $("#searchRoom").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
-                $("#deptTable tr").filter(function() {
+                $("#roomTable tr").filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
 
-            $('#addDept').click(function(){
-                $('#modalTitle').html('Add Department');
+            $('#addRoom').click(function(){
+                $('#modalTitle').html('Add Room');
                 $('#sbmtForm').html('Add');
                 $('#sbmtForm').addClass('px-5');
-                $('#deptName').focus();
+                $('#roomName').focus();
             });
 
-            var deptID;
+            var roomID;
             $('.editBtn').click(function(){
-                $('#modalTitle').html('Edit Department');
+                $('#modalTitle').html('Edit Room');
                 $('#sbmtForm').html('Save Changes');
                 $('#sbmtForm').removeClass('px-5');
-                $('#deptName').val($(this).attr('data-dept'));
-                $('#deptName').focus();
-                deptID = $(this).attr('data-deptid');
+                $('#roomName').val($(this).attr('data-room'));
+                $('#roomName').focus();
+                roomID = $(this).attr('data-roomid');
             });
 
             $('#sbmtForm').click(function(){
-                if($('#deptName').val() == ""){
+                if($('#roomName').val() == ""){
                     event.preventDefault();
-                    $('#deptError').removeClass('visually-hidden');
+                    $('#roomError').removeClass('visually-hidden');
                 }else{
-                    $('#deptError').addClass('visually-hidden');
-                    var editDept = $('#deptName').val();
-
-                    if($('#modalTitle').html() == 'Edit Department'){
+                    $('#roomError').addClass('visually-hidden');
+                    var editRoom = $('#roomName').val();
+                    console.log($('#modalTitle').html());
+                    if($('#modalTitle').html() == 'Edit Room'){
                         event.preventDefault();
-                        window.location.href = './dept-edit.php?editID=' + deptID + '&editDept=' + editDept;
+                        window.location = './room-edit.php?editID=' + roomID + '&editRoom=' + editRoom;
                     }
                 }
             });
 
-            $('#deptModal').on('hidden.bs.modal', function(){
+            $('#roomModal').on('hidden.bs.modal', function(){
                 $('#frmModal').get(0).reset();
             });
 
             $('.deleteBtn').click(function(){
                 Swal.fire({
-                    title: 'Are you sure you want to delete this Department?',
-                    html: $(this).data('dept'),
+                    title: 'Are you sure you want to delete this Room?',
+                    html: $(this).data('room'),
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -236,7 +236,7 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = './dept-delete.php?delDept=' + $(this).data('deptid');
+                        window.location.href = './room-delete.php?delRoom=' + $(this).data('roomid');
                     }
                 })
             })

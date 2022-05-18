@@ -309,6 +309,7 @@
 
             // ============================= EDIT BUTTON =============================
             $('.editBtn').click(function(){
+                $('#frmModal').attr('action', './edit-user.php');
                 $('#user_idNumber').val(this.id);
                 UName = $(this).attr("data-name");
                 UEmail = $(this).attr("data-email");
@@ -353,7 +354,6 @@
                 }
 
                 $('#user_idNumber').attr('readonly', true);
-                $('#frmModal').attr('action', './edit-user.php');
             });
             // ============================= END =============================
 

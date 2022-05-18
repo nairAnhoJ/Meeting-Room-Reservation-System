@@ -7,27 +7,31 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link fs-5" id="home" aria-current="page" href="./home.php">Home</a>
+                <a class="nav-link fs-6" id="home" aria-current="page" href="./home.php">Home</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link fs-5" id="request" href="./request.php">My Request</a>
+                <a class="nav-link fs-6" id="request" href="./request.php">My Request</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link fs-5" id="approval" href="./approval.php">For Approval</a>
+                <a class="nav-link fs-6" id="approval" href="./approval.php">For Approval</a>
             </li>
 
             <li class="nav-item <?php if(($_SESSION['role'] != 'superuser') && ($_SESSION['role'] != 'head')){ echo 'visually-hidden'; } ?>">
-                <a class="nav-link fs-5" id="manageuser" href="./manage-user.php">Manage Users</a>
+                <a class="nav-link fs-6" id="manageuser" href="./manage-user.php">Users</a>
             </li>
 
             <li class="nav-item <?php if($_SESSION['role'] != 'superuser'){ echo 'visually-hidden'; } ?>">
-                <a class="nav-link fs-5" id="managedept" href="#">Manage Departments</a>
+                <a class="nav-link fs-6" id="managedept" href="./departments.php">Departments</a>
+            </li>
+
+            <li class="nav-item <?php if($_SESSION['role'] != 'superuser'){ echo 'visually-hidden'; } ?>">
+                <a class="nav-link fs-6" id="managerooms" href="./rooms.php">Rooms</a>
             </li>
             
             <li class="nav-item dropdown position-absolute end-0 pe-5 me-5">
-                <a class="nav-link dropdown-toggle active fs-5" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?php echo $_SESSION['fname']; ?> </a>
+                <a class="nav-link dropdown-toggle active fs-6" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?php echo $_SESSION['fname']; ?> </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li><a class="dropdown-item <?php if($_SESSION['role'] == 'superuser'){ echo 'visually-hidden'; } ?>" href="#">Change Password</a></li>
                     <li><a class="dropdown-item" href="./log-out.php">Log Out</a></li>
