@@ -11,10 +11,10 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link fs-6" id="request" href="./request.php">My Request</a>
+                <a class="nav-link fs-6" id="request" href="./request.php"><?php if($_SESSION['role'] == 'head'){ echo 'My Reservation'; }else{ echo 'My Request'; } ?></a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item <?php if(($_SESSION['role'] != 'superuser') && ($_SESSION['role'] != 'head')){ echo 'visually-hidden'; } ?>">
                 <a class="nav-link fs-6" id="approval" href="./approval.php">For Approval</a>
             </li>
 

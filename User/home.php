@@ -3,6 +3,8 @@
 
     include("../Database/connection.php");
 
+    date_default_timezone_set("Asia/Manila");
+
     $query_room = "SELECT * FROM `room` LIMIT 1";
     $result_room = mysqli_query($con, $query_room);
     if(mysqli_num_rows($result_room) > 0){
@@ -15,6 +17,16 @@
         header('location: ../login.php');
     }
 
+    $todayTime = strtotime(date("Y-m-d H:i:s"));
+    $queryDone = "SELECT * FROM `reservation` WHERE `status` <> 'Done'";
+    $resultDone = mysqli_query($con, $queryDone);
+    while($rowDone = mysqli_fetch_assoc($resultDone)){
+        $doneId = $rowDone['reserve_id'];
+        if($todayTime > strtotime($rowDone['end_date_time'])){
+            $updateDone = "UPDATE `reservation` SET `status`='Done' WHERE `reserve_id` = '$doneId'";
+            mysqli_query($con, $updateDone);
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +46,57 @@
     <script src="../js/sweetalert2.all.min.js"></script>
 </head>
 <body class="overflow-hidden vh-100" onload="navFunction()">
+
+    <?php
+
+    if(!isset($_SESSION['headResSuccess'])){
+    }else{
+        if ($_SESSION['headResSuccess'] == true){
+            ?>
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Awesome!',
+                        text: 'Reservation Successful!',
+                    });
+                </script>
+            <?php
+            $_SESSION['headResSuccess'] = false;
+        }
+    }
+
+    if(!isset($_SESSION['staffResSuccess'])){
+    }else{
+        if ($_SESSION['staffResSuccess'] == true){
+            ?>
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Awesome!',
+                        text: 'Your request has been process. Please wait for approval.',
+                    });
+                </script>
+            <?php
+            $_SESSION['staffResSuccess'] = false;
+        }
+    }
+
+    if(!isset($_SESSION['resError'])){
+    }else{
+        if ($_SESSION['resError'] == true){
+            ?>
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Reservation Error!',
+                        text: 'Please choose a different schedule date or time.',
+                    });
+                </script>
+            <?php
+            $_SESSION['resError'] = false;
+        }
+    }
+    ?>
     
     <?php require_once './nav.php' ?>
 
@@ -117,27 +180,15 @@
                             <div class="invalid-feedback">Please enter a valid description.</div>
                         </div>
                         <div class="row">
-                            <div class="col-6 mb-3">
-                                <label for="startDate" class="col-form-label">Start Date:</label>
-                                <input type="date" name="sDate" class="form-control" id="startDate" required>
-                            <div class="invalid-feedback">Please choose start date.</div>
+                            <div class=" col-6 mb-3">
+                                <label for="startDate" class="col-form-label">Start Date & Time:</label>
+                                <input type="datetime-local" name="sDateTime" class="form-control" id="startDateTime" required>
+                                <div class="invalid-feedback">Please choose start date & time.</div>
                             </div>
                             <div class="col-6 mb-3">
-                                <label for="endDate" class="col-form-label">End Date:</label>
-                                <input type="date" name="eDate" class="form-control" id="endDate" required>
-                            <div class="invalid-feedback">Please choose end date.</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <label for="startTime" class="col-form-label">Start Time:</label>
-                                <input type="time" name="sTime" class="form-control" id="startTime" required>
-                            <div class="invalid-feedback">Please choose start time.</div>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label for="endTime" class="col-form-label">End Time:</label>
-                                <input type="time" name="eTime" class="form-control" id="endTime" required>
-                            <div class="invalid-feedback">Please choose end time.</div>
+                                <label for="startTime" class="col-form-label">End Date & Time:</label>
+                                <input type="datetime-local" name="eDateTime" class="form-control" id="endDateTime" required>
+                                <div class="invalid-feedback">Please choose end date & time.</div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -244,8 +295,8 @@
                         events: [
                             {
                                 title: 'Test',
-                                start: '2022-05-09T09:00',
-                                end: '2022-05-09T12:30'
+                                start: '2022-05-09T19:15',
+                                end: '2022-05-09T22:30'
                             }
                         ]
                     });
@@ -284,61 +335,58 @@
             });
 
             
-            $("#startDate").change(function(){
-                if(!$("#endDate").val()){
-                    $("#endDate").val(this.value);
+            $("#startDateTime").change(function(){
+                if(!$("#endDateTime").val()){
+                    $("#endDateTime").val(this.value);
                 }
 
-                var sDate = $('#startDate').val();
-                var eDate = $('#endDate').val();
+                var sDate = $('#startDateTime').val();
+                var eDate = $('#endDateTime').val();
                 var sTime = new Date(sDate).getTime();
                 var eTime = new Date(eDate).getTime();
 
                 var today = new Date();
-                var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                var dateTime = date+' '+time;
+                var yyyy = today.getFullYear();
+                var MM = today.getMonth() + 1;
+                if(MM < 10){
+                    MM = "0"+MM;
+                }
+                var dd = today.getDate();
+                if(dd < 10){
+                    dd = "0"+dd;
+                }
+                var HH = today.getHours();
+                if(HH < 10){
+                    HH = "0"+HH;
+                }
+                var mm = today.getMinutes();
+                if(mm < 10){
+                    mm = "0"+mm;
+                }
+
+                var DateTimeNow = yyyy + '-' + MM + '-' + dd + 'T' + HH + ':' + mm;
+                var nowTime = new Date(DateTimeNow).getTime();
+
+                if(sTime < nowTime){
+                    $("#startDateTime").val(DateTimeNow);
+                }
 
                 if(sTime > eTime){
-                    $("#startDate").val(eDate);
+                    $("#startDateTime").val(eDate);
                 }
             });
-            $("#endDate").change(function(){
-                if(!$("#startDate").val()){
-                    $("#startDate").val(this.value);
+            $("#endDateTime").change(function(){
+                if(!$("#startDateTime").val()){
+                    $("#startDateTime").val(this.value);
                 }
 
-                var sDate = $('#startDate').val();
-                var eDate = $('#endDate').val();
+                var sDate = $('#startDateTime').val();
+                var eDate = $('#endDateTime').val();
                 var sTime = new Date(sDate).getTime();
                 var eTime = new Date(eDate).getTime();
 
                 if(sTime > eTime){
-                    $("#endDate").val(sDate);
-                }
-            });
-            $("#startTime").change(function(){
-                if(!$("#endTime").val()){
-                    $("#endTime").val(this.value);
-                }
-
-                var sTime = $('#startTime').val();
-                var eTime = $('#endTime').val();
-
-                if(sTime > eTime){
-                    $("#startTime").val(eTime);
-                }
-            });
-            $("#endTime").change(function(){
-                if(!$("#startTime").val()){
-                    $("#startTime").val(this.value);
-                }
-
-                var sTime = $('#startTime').val();
-                var eTime = $('#endTime').val();
-
-                if(sTime > eTime){
-                    $("#endTime").val(sTime);
+                    $("#endDateTime").val(sDate);
                 }
             });
         });

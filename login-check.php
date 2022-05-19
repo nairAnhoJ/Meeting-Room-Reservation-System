@@ -13,17 +13,17 @@
         if (password_verify($userpass, $userRow['passwrd'])) {
             $_SESSION['fname'] = $userRow['full_name'];
             $_SESSION['Connected'] = 'true';
+            $_SESSION['uID'] = $userRow['idNum'];
+            $_SESSION['userHead'] = $userRow['head'];
             $_SESSION['dept'] = $userRow['department'];
             $_SESSION['role'] = $userRow['role'];
             header('Location: ./User/home.php');
         } else {
             $_SESSION['errMes'] = 'true';
-            echo "asdfasdf";
             header('Location: ./login.php');
         }
     }else{
         $_SESSION['errMes'] = 'true';
-        echo "asdfasddfgsdfgsdfgfa";
         header('Location: ./login.php');
     }
 
