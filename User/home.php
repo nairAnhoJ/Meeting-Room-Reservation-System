@@ -49,53 +49,73 @@
 
     <?php
 
-    if(!isset($_SESSION['headResSuccess'])){
-    }else{
-        if ($_SESSION['headResSuccess'] == true){
-            ?>
-                <script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Awesome!',
-                        text: 'Reservation Successful!',
-                    });
-                </script>
-            <?php
-            $_SESSION['headResSuccess'] = false;
+        if(!isset($_SESSION['headResSuccess'])){
+        }else{
+            if ($_SESSION['headResSuccess'] == true){
+                ?>
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Awesome!',
+                            text: 'Reservation Successful!',
+                        });
+                    </script>
+                <?php
+                $_SESSION['headResSuccess'] = false;
+            }
         }
-    }
 
-    if(!isset($_SESSION['staffResSuccess'])){
-    }else{
-        if ($_SESSION['staffResSuccess'] == true){
-            ?>
-                <script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Awesome!',
-                        text: 'Your request has been process. Please wait for approval.',
-                    });
-                </script>
-            <?php
-            $_SESSION['staffResSuccess'] = false;
+        if(!isset($_SESSION['staffResSuccess'])){
+        }else{
+            if ($_SESSION['staffResSuccess'] == true){
+                ?>
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Awesome!',
+                            text: 'Your request has been process. Please wait for approval.',
+                        });
+                    </script>
+                <?php
+                $_SESSION['staffResSuccess'] = false;
+            }
         }
-    }
 
-    if(!isset($_SESSION['resError'])){
-    }else{
-        if ($_SESSION['resError'] == true){
-            ?>
-                <script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Reservation Error!',
-                        text: 'Please choose a different schedule date or time.',
-                    });
-                </script>
-            <?php
-            $_SESSION['resError'] = false;
+        if(!isset($_SESSION['resError'])){
+        }else{
+            if ($_SESSION['resError'] == true){
+                ?>
+                    <script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Reservation Error!',
+                            text: 'Please choose a different schedule date or time.',
+                        });
+                    </script>
+                <?php
+                $_SESSION['resError'] = false;
+            }
         }
-    }
+
+        //Create Array
+        $roomNameArray = array();
+        $roomDescArray = array();
+        $roomStartArray = array();
+        $roomEndArray = array();
+        $arrayCount = 0;
+
+        $queryAllRes = "SELECT room.room_name, res.description, res.status, res.start_date_time, res.end_date_time FROM reservation AS res INNER JOIN room ON res.room_id = room.room_id WHERE res.status = 'Approved'";
+        $resultAllRes = mysqli_query($con, $queryAllRes);
+        if(mysqli_num_rows($resultAllRes) > 0){
+            while($rowAllRes = mysqli_fetch_assoc($resultAllRes)){
+                array_push($roomNameArray, $rowAllRes['room_name']);
+                array_push($roomDescArray, $rowAllRes['description']);
+                array_push($roomStartArray, str_replace(" ","T", $rowAllRes['start_date_time']));
+                array_push($roomEndArray, str_replace(" ","T", $rowAllRes['end_date_time']));
+            }
+            $arrayCount = count($roomNameArray);
+        }
+
     ?>
     
     <?php require_once './nav.php' ?>
@@ -220,8 +240,23 @@
             var selectedRoomId;
             var c = 0;
 
+            const roomNameArray = <?php echo json_encode($roomNameArray); ?>;
+            const roomDescArray = <?php echo json_encode($roomDescArray); ?>;
+            const roomStartArray = <?php echo json_encode($roomStartArray); ?>;
+            const roomEndArray = <?php echo json_encode($roomEndArray); ?>;
+            const arrayCount = <?php echo json_encode($arrayCount); ?>;
+
+            
+
             // ===================================== Front Page Full Calendar =====================================
             var roomArray = <?php echo json_encode($tabArray); ?>;
+
+            var reserveEvents = [];
+            for(var i = 0; i < arrayCount; i++){
+                if(roomNameArray[i] == roomArray[0]){
+                    reserveEvents.push({title: roomDescArray[i], start: roomStartArray[i], end: roomEndArray[i]});
+                }
+            }
 
             var calendarEl1 = document.getElementById('calendar_'+roomArray[0]);
             var calendar1 = new FullCalendar.Calendar(calendarEl1, {
@@ -242,13 +277,7 @@
                         }
                     }
                 },
-                events: [
-                    {
-                        title: 'Test',
-                        start: '2022-05-09T10:00:00',
-                        end: '2022-05-09T15:30:00'
-                    }
-                ]
+                events: reserveEvents
             });
             calendar1.render();
 
@@ -266,6 +295,14 @@
                 }else{
                     calendar1.destroy();
                 }
+
+                reserveEvents = [];
+                for(var i = 0; i < arrayCount; i++){
+                if(roomNameArray[i] == (this.id).replace("btn-", "")){
+                    reserveEvents.push({title: roomDescArray[i], start: roomStartArray[i], end: roomEndArray[i]});
+                }
+            }
+
                 var roomId = 'calendar_' + (this.id).replace("btn-", "");
                 var roomName = (this.id).replace("btn-", "");
                 var btnId = '#'+this.id;
@@ -292,13 +329,7 @@
                                 }
                             }
                         },
-                        events: [
-                            {
-                                title: 'Test',
-                                start: '2022-05-09T19:15',
-                                end: '2022-05-09T22:30'
-                            }
-                        ]
+                        events: reserveEvents
                     });
                     calendar.render();
 
